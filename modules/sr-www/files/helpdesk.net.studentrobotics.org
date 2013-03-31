@@ -1,0 +1,40 @@
+<VirtualHost *:80>
+    ServerAdmin committee@studentrobotics.org
+
+    ServerName helpdesk.net.studentrobotics.org
+    ServerAlias helpdesk
+    DocumentRoot /var/www
+    <Directory />
+        Options FollowSymLinks
+        AllowOverride None
+    </Directory>
+
+#    <Location />
+#        Allow from 172.18.4.0/24
+#        Deny from all
+#        Order deny,allow
+#    </Location>
+
+    Alias /static/ /opt/sr/helpdesk-tracker/static/
+
+    <Directory /opt/sr/helpdesk-tracker/static>
+        Order deny,allow
+        Allow from all
+    </Directory>
+
+    WSGIScriptAlias / /opt/sr/helpdesk-tracker/helpdesk.wsgi
+
+    <Directory /opt/sr/helpdesk-tracker>
+        Order allow,deny
+        Allow from all
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/helpdesk-error.log
+
+    # Possible values include: debug, info, notice, warn, error, crit,
+    # alert, emerg.
+    LogLevel warn
+
+    CustomLog ${APACHE_LOG_DIR}/helpdesk-access.log combined
+
+</VirtualHost>

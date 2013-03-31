@@ -1,0 +1,3 @@
+#! /bin/bash
+cd /opt/sr/helpdesk-tracker
+./manage.py syncdb --noinput

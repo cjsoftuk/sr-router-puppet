@@ -3,6 +3,10 @@ class sr-www::apache2 {
     ensure => latest,
   }
 
+  package { "libapache2-mod-wsgi":
+    ensure => "latest",
+  }
+
   file { "/etc/apache2/sites-available/default":
     ensure => 'present',
     source => 'puppet:///modules/sr-www/default',
@@ -18,6 +22,12 @@ class sr-www::apache2 {
   file { "/etc/apache2/sites-available/ntop.net.studentrobotics.org":
     ensure => 'present',
     source => 'puppet:///modules/sr-www/ntop.net.studentrobotics.org',
+    notify => Service["apache2"],
+  }
+
+  file { "/etc/apache2/sites-available/helpdesk.net.studentrobotics.org":
+    ensure => 'present',
+    source => 'puppet:///modules/sr-www/helpdesk.net.studentrobotics.org',
     notify => Service["apache2"],
   }
 
@@ -45,6 +55,13 @@ class sr-www::apache2 {
     target => '/etc/apache2/sites-available/ntop.net.studentrobotics.org',
     notify => Service["apache2"],
     require => File["/etc/apache2/sites-available/default"],
+  }
+
+  file { "/etc/apache2/sites-enabled/helpdesk.net.studentrobotics.org":
+    ensure => 'link',
+    target => '/etc/apache2/sites-available/helpdesk.net.studentrobotics.org',
+    notify => Service["apache2"],
+    require => File["/etc/apache2/sites-available/helpdesk.net.studentrobotics.org"],
   }
 
   file { "/etc/apache2/mods-enabled/proxy.load":
